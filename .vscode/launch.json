@@ -1,0 +1,17 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Python Package: auth.py",
+            "type": "debugpy",
+            "request": "launch",
+            "module": "auth.py"
+        },
+        {
+            "name": "Python Package: work",
+            "type": "debugpy",
+            "request": "launch",
+            "module": "work"
+        }
+    ]
+}

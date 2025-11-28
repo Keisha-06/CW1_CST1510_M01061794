@@ -1,127 +1,180 @@
-pip3 install bcrypt
-
 import bcrypt
 import os
-
-def hash_password(plain_text_password):
-    password_bytes = plain_text_password.encode('utf-8')
-    salt = bcrypt.gensalt()
-    hashed_password = bcrypt.hashpw(password_bytes, salt)
-    return hashed_password
-
-def verify_password(plain_text_password, hashed password):
-    password_bytes = plain_text_password.encode('utf-8')
-    hashed_password_bytes = hashed_password.encode('utf-8')
-    return bcrypt.checkpw(password_bytes, hashed_password_bytes)
-
-test_password = "SecurePassword123"
-hashed = hash_password(test_password) 
-print(f"Original password: {test_password}") 
-print(f"Hashed password: {hashed}") 
-print(f"Hash length: {len(hashed)} characters")
-
-is_valid = verify_password(test_password, hashed) 
-print(f"\nVerification with correct password: {is_valid}")
-
-is_invalid = verify_password("WrongPassword", hashed) 
-print(f"Verification with incorrect password: {is_invalid}")
-
 USER_DATA_FILE = "users.txt"
 
+user = input('Provide a password: ')
+def hash_password(text): 
+    bytes = text.encode('utf-8')
+    salt = bcrypt.gensalt()
+    hash = bcrypt.hashpw(bytes, salt)
+    userpass = hash.decode('utf-8')
+    with open('User-data.txt', 'w') as f:
+        f.write(userpass)
+    return(hash)
+hash_password(user)
+with open('User-data.txt', 'r') as f:
+    data = f.read()
+#print(data)
+def verify_password(text: str) -> bool:
+    with open('User-data.txt', 'r') as f:
+        stored = f.read().strip()
+        if not stored:
+            raise ValueError("No password stored in txt")
+        plain = text.encode('utf-8')
+        hash = stored.encode('utf-8')
+        return bcrypt.checkpw(plain, hash) 
+
+result = verify_password(user)
+print(result)
+hashed = hash_password(user)
+print(f"Original password: {user}")
+print(f"Hashed password: {hashed}")
+print(f"Hash length: {len(hashed)} characters")
+
+
 def register_user(username, password):
-    if user_exists(username):
-        print("Username already exists. Please choose a different username.")
-        return False
-    hashed_password = hash_password(password).decode('utf-8')
-    with open(USER_DATA_FILE, "a") as f:
-        f.write(f"{username},{hashed_password}\n")
-    print("User registered successfully.")
-    return True
-    
-def user_exists(username):
-    if not os.path.exists(USER_DATA_FILE):
-        return False
-    with open(USER_DATA_FILE, "r") as f:
+    with open('users.txt', 'r') as f:
         for line in f:
-            stored_username, _ = line.strip().split(",", 1)
-            if stored_username == username:
-                return True
-    return False
+            line  = line.strip()
+            existing = line.split(',')[0].strip()
+            if username == existing: 
+                print(f'User name {username} is taken. Try again.')
+                return (False, 'User name is taken. Try again.')
+        localhash = hash_password(password)
+        localhashed = localhash.decode('utf-8')
+        entry = f'{username}, {localhashed}\n'
+        with open('users.txt', 'a') as f_append:
+            f_append.write(entry)
+        return (True, 'User registered successfully')
+username_input = input('Enter a Username: ')
+password_input = input('Enter Password: ')
+hashedpass = register_user(username_input, password_input)
+hashedpass
+
+def user_exists(username):
+    try:
+        with open('users.txt', 'r') as f:
+        # File exists, do something
+            pass
+    except FileNotFoundError:
+        print("File doesn't exist")
+    with open('users.txt', 'r') as f:
+        for line in f:
+            line = line.strip()
+            exists = line.split(',')[0].strip()
+            if username == exists:
+                print(f'{username} already exists')
+                return False
+#user_exists('Zkhan')
+
+import bcrypt
 
 def login_user(username, password):
-    with open(USER_DATA_FILE, "r") as f:
-        for line in f.readlines():
-            user, hash = line.strip().split(",", 1)
-            if user == username:
-                return verify_password(password, hash)
-    return False
-
+    try:
+        # Check if user exists and verify password
+        with open('users.txt', 'r') as f:
+            for line in f:
+                line = line.strip()
+                stored_username, stored_password_hash = line.split(',')
+                stored_username = stored_username.strip()
+                stored_password_hash = stored_password_hash.strip()
+                
+                if username == stored_username:
+                    # Convert stored hash string to bytes for bcrypt
+                    stored_hash_bytes = stored_password_hash.encode('utf-8')
+                    if bcrypt.checkpw(password.encode('utf-8'), stored_hash_bytes):
+                        print(f'Login successful! Welcome {username}')
+                        return True
+                    else:
+                        print('Incorrect password')
+                        return False
+            
+            # If we get here, no matching username was found
+            print(f'User {username} not found')
+            return False
+            
+    except FileNotFoundError:
+        print("User database not found. No users registered yet.")
+        return False
+            
 def validate_username(username):
-    pass
+    if isinstance(username, str):
+        return True, ""  # (is_valid, error_message)
+    else:
+        return False, f"'{username}' is not in correct format - expected string"
 
 def validate_password(password):
-    pass
+    if isinstance(password, str):
+        return True, ""  # (is_valid, error_message)
+    else:
+        return False, f"'{password}' is not in correct format - expected string"
     
-def display_menu():    
-    """Displays the main menu options."""    
-    print("\n" + "="*50)    
-    print("  MULTI-DOMAIN INTELLIGENCE PLATFORM")    
-    print("  Secure Authentication System")    
-    print("="*50) 
-    print("\n[1] Register a new user")    
-    print("[2] Login")    
-    print("[3] Exit")    
-    print("-"*50) 
-    
-def main():    
-    """Main program loop."""    
-    print("\nWelcome to the Week 7 Authentication System!")        
-    
-    while True:        
-        display_menu()        
-        choice = input("\nPlease select an option (1-3): ").strip()                
-        
-        if choice == '1':                        
-            print("\n--- USER REGISTRATION ---")            
-            username = input("Enter a username: ").strip()                                    
-            
-            is_valid, error_msg = validate_username(username)            
-            if not is_valid:                
-                print(f"Error: {error_msg}")                
-                continue                        
-            password = input("Enter a password: ").strip()
 
-            is_valid, error_msg = validate_password(password)            
-            if not is_valid:                
-                print(f"Error: {error_msg}")                
+def display_menu():
+    """Displays the main menu options."""
+    print("\n" + "="*50)
+    print(" MULTI-DOMAIN INTELLIGENCE PLATFORM")
+    print(" Secure Authentication System")
+    print("="*50)
+    print("\n[1] Register a new user")
+    print("[2] Login")
+    print("[3] Exit")
+    print("-"*50)
+
+def main():
+    """Main program loop."""
+    print("\nWelcome to the Week 7 Authentication System!")
+    while True:
+        display_menu()
+        choice = input("\nPlease select an option (1-3): ").strip()
+        if choice == '1':
+            # Registration flow
+            print("\n--- USER REGISTRATION ---")
+            username = input("Enter a username: ").strip()
+            
+            # Validate username
+            is_valid, error_msg = validate_username(username)
+            if not is_valid:
+                print(f"Error: {error_msg}")
+                continue
+            
+            password = input("Enter a password: ").strip()
+            
+            # Validate Password
+            is_valid, error_msg = validate_password(password)
+            if not is_valid:
+                print(f"Error: {error_msg}")
                 continue
                 
-            password_confirm = input("Confirm password: ").strip()           
-            if password != password_confirm:                
-                print("Error: Passwords do not match.")                
+            # Confirm password
+            password_confirm = input("Confirm password: ").strip()
+            if password != password_confirm:
+                print("Error: Passwords do not match.")
                 continue
-                
+            
+            # Register the user
             register_user(username, password)
 
-        elif choice == '2':                       
-            print("\n--- USER LOGIN ---")            
-            username = input("Enter your username: ").strip()            
-            password = input("Enter your password: ").strip()                                    
+        elif choice == '2':
+            # Login flow
+            print("\n--- USER LOGIN ---")
+            username = input("Enter your username: ").strip()
+            password = input("Enter your password: ").strip()
             
-            if login_user(username, password):                
-                print("\nYou are now logged in.")                
-                print("In a real application, you would now access the d ")                               
-                                     
-                input("\nPress Enter to return to main menu...")                
+            # Attempt login
+            if login_user(username, password):
+                print("\nYou are now logged in.")
+                print("(In a real application, you would now access the dashboard)")
+                # Optional: Ask if they want to logout or exit
+                input("\nPress Enter to return to main menu...")
                 
-        elif choice == '3':                       
-            print("\nThank you for using the authentication system.")            
-            print("Exiting...")            
-            break                
-        
-        else:            
-            print("\nError: Invalid option. Please select 1, 2, or 3.") 
-            
-            
-if __name__ == "__main__":    
+        elif choice == '3':
+            # Exit
+            print("\nThank you for using the authentication system.")
+            print("Exiting...")
+            break
+        else:
+            print("\nError: Invalid option. Please select 1, 2, or 3.")
+
+if __name__ == "__main__":
     main()
