@@ -17,7 +17,7 @@ messages = [
     {"role": "system", "content": "You are a helpful assistant"}
 ]
 
-print("ChatGPT Console Chat (type 'quit' to exit)")
+print("ChatGPT Console Chat (type 'quit' to exit.)")
 print("-" * 50)
 
 while True:

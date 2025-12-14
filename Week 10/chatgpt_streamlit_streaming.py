@@ -28,7 +28,7 @@ with st.sidebar:
 message_count = len([m for m in st.session_state.messages if m["role"] != "system"])
 st.metric("Messages", message_count)
 
-#Clear chat button
+#Clear chat button.
 if st.button ("🗑 Clear Chat", use_container_width=True):
     st.session_state.messages = []
     st.rerun()

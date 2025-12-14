@@ -25,7 +25,7 @@ while True:
     #Add user message to history
     messages.append({"role": "user", "content": user_input})
 
-    #Get AI response
+    #Get AI response.
     completion = openai.api_key.chat.completions.create(
         model="gpt-40",
         messages=messages

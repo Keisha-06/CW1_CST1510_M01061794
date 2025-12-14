@@ -2,7 +2,7 @@ import streamlit as st
 
 st.title("Test Secrets Setup")
 
-#Try to access the secret.
+#Try to access the secret
 try:
     api_key = st.secrets["OPENAI_API_KEY"]
     st.success("API key loaded successfully!")

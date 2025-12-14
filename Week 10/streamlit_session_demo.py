@@ -20,7 +20,7 @@ if prompt:
         "role": "user", 
         "content": prompt
     })
-    #Display user message
+    #Display user message.
 
     with st.chat_message("user"):
         st.markdown(prompt)

@@ -9,7 +9,7 @@ openai.api_key = os.getenv("OPENAI_API_KEY")
 competion = openai.api_key.chat.completions.create(
     model="gpt-40",
     messages=[
-        {"role": "system", "content": "You are a helpful assistant"},
+        {"role": "system", "content": "You are a helpful assistant."},
         {"role": "user", "content": "Hello! What is AI?"}
 
     ]
