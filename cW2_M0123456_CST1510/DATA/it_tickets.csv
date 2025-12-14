@@ -1,0 +1,11 @@
+id,ticket_id,priority,status,category,subject,description,created_date,resolved_date,assigned_to,created_at
+1,TCK-2025-001,Critical,Open,Network,Internet Outage,"Main office lost connectivity; routers not responding.",2025-01-04,,jdoe,2025-01-04 09:10:15
+2,TCK-2025-002,High,In Progress,Software,ERP Login Failure,"Users unable to access ERP after update.",2025-01-05,,asmith,2025-01-05 10:44:22
+3,TCK-2025-003,Medium,Resolved,Hardware,Printer Not Working,"3rd floor printer showing paper jam error.",2025-01-06,2025-01-06,npatel,2025-01-06 11:32:08
+4,TCK-2025-004,Low,Closed,Software,Password Reset,"User requested password reset for email account.",2025-01-07,2025-01-07,tnguyen,2025-01-07 08:03:19
+5,TCK-2025-005,High,Open,Network,Slow Wi-Fi,"Wi-Fi performance degraded in west wing.",2025-01-08,,mlopez,2025-01-08 15:27:40
+6,TCK-2025-006,Critical,In Progress,Hardware,Server Overheating,"Temperature warnings on PROD-SRV-2.",2025-01-09,,kben,2025-01-09 07:58:11
+7,TCK-2025-007,Medium,Resolved,Software,VPN Issues,"User cannot connect to VPN when offsite.",2025-01-10,2025-01-10,jdoe,2025-01-10 10:22:55
+8,TCK-2025-008,Low,Closed,Hardware,Keyboard Replacement,"Keys not functioning properly; replacement needed.",2025-01-11,2025-01-11,asmith,2025-01-11 13:44:18
+9,TCK-2025-009,High,Closed,Network,Firewall Block,"Legitimate traffic incorrectly blocked by firewall rule.",2025-01-12,2025-01-12,tnguyen,2025-01-12 18:59:40
+10,TCK-2025-010,Medium,Resolved,Software,Application Crash,"App X crashes when opening large files.",2025-01-13,2025-01-13,npatel,2025-01-13 08:39:51
